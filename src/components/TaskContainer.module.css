@@ -1,0 +1,11 @@
+.task-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: 100vw;
+    row-gap: 35px;
+    column-gap: 3px;
+    margin-top: 40px;
+}
+
