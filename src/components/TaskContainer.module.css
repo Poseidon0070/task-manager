@@ -10,4 +10,11 @@
     margin-top: 40px;
     margin-bottom: 30px;
 }
+/* .task-container{
+    display: flex;
+    flex-direction: column;
+    height: 75vh;
+    flex-wrap: wrap;
+    overflow-x: auto;
+} */
 
