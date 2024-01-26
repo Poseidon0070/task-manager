@@ -4,7 +4,8 @@ let taskSlice = createSlice({
     name: 'Task',
     initialState: {
         tasks: [],
-        loading : false
+        loading : false,
+        filter : "All"
     },
     reducers: { 
 
@@ -18,8 +19,33 @@ let taskSlice = createSlice({
             console.log("tasks : ", state.tasks)
         },
 
+        delete : (state, action) => {
+            let requiredId = action.payload
+            let requiredIndex = state.tasks.findIndex(task => task._id === requiredId)
+            state.tasks.splice(requiredIndex,1)
+        },
+
         setLoading : (state, action) => {
             state.loading = action.payload
+        },
+
+        setFilter : (state, action) => {
+            state.filter = action.payload
+        },
+
+        reorder : (state, action) => {
+            const sourceIndex = action.payload.sourceIndex;
+            const destinationIndex = action.payload.destinationIndex;
+            // console.log(state.tasks[sourceIndex]._id)
+            // console.log(state.tasks[destinationIndex]._id)
+            const sourceId = state.tasks[sourceIndex]._id
+            const destinationId = state.tasks[destinationIndex]._id
+            console.log(sourceIndex, destinationIndex)
+            // [myArray[index1], myArray[index2]] = [myArray[index2], myArray[index1]]
+            let modifiedTasks = state.tasks
+            let [removedTask] = modifiedTasks.splice(sourceIndex, 1)
+            modifiedTasks.splice(destinationId, 0, removedTask)
+            state.tasks = modifiedTasks 
         }
 
     }

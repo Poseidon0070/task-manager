@@ -5,6 +5,7 @@ const fs = require('fs').promises
 
 const app = express()
 app.use(bodyParser.json());
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PATCH,DELETE,PUT');
@@ -18,19 +19,24 @@ app.post('/addTask', async (req, res) => {
     _id: req.body._id,  
     title: req.body.title,
     date: req.body.date,
-    description: req.body.description
+    description: req.body.description,
+    complete: req.body.complete
   };
 
   try {
     const data = await fs.readFile(path.join(__dirname, '/db/database.txt'), 'utf-8');
-    const parsedData = await JSON.parse(data);
-
-    parsedData.push(newTask);
-
-    const response = await fs.writeFile(path.join(__dirname, '/db/database.txt'), JSON.stringify(parsedData));
-
+    let response;
+    if(!data) {
+      let data = []
+      data.push(newTask)
+      response = await fs.writeFile(path.join(__dirname, '/db/database.txt'), JSON.stringify(data))
+    }else{
+      const parsedData = await JSON.parse(data);
+      parsedData.push(newTask);
+      response = await fs.writeFile(path.join(__dirname, '/db/database.txt'), JSON.stringify(parsedData));
+    }
     console.log('Task added successfully');
-    return res.json(response)
+    return res.status(201).json(response)
   } catch (err) {  
     console.error(err);  
     res.status(500).send('Internal Server Error');
@@ -41,6 +47,7 @@ app.put('/sendTask', async(req, res) => {
   const tasks = req.body 
   try{
     await fs.writeFile(path.join(__dirname, '/db/database.txt'), JSON.stringify(tasks))
+    return res.status(200).json({ message: 'Task sent successfully' })
   } catch (err) { 
     console.error(err); 
     res.status(500).send('Internal Server Error');
@@ -49,23 +56,35 @@ app.put('/sendTask', async(req, res) => {
  
 app.get('/getTask', async(req, res) => { 
   try{
-    const data = await fs.readFile(__dirname+'/db/database.txt', 'utf-8');
-    const parsedData = await JSON.parse(data);
-    console.log(parsedData)
-    return res.json(parsedData); 
+    const data = await fs.readFile(path.join(__dirname, '/db/database.txt'), 'utf-8');
+    if(!data){
+      return res.status(200).json([]);
+    }else{
+      const parsedData = await JSON.parse(data);
+      console.log(parsedData)
+      return res.status(200).json(parsedData); 
+    }
   }catch(err){
-    console.log("cannot send data")
-    throw err
+    console.log("cannot get task")
+    res.status(500).send('Internal Server Error');
   } 
 })  
 
-app.get('/deleteItem/:itemId', async(req, res) => {
-    const _id = req.params._id
-    const data = await fs.readFile(__dirname + '/db/database.txt', 'utf-8');
-    const tasks = JSON.parse(data);
-    const newTasks = tasks.filter((task) => task._id.toString() !== _id.toString())
-    console.log(newTasks)
-    // res.json(newTasks)
+app.delete('/deleteTask/:taskId', async(req, res) => {
+  try{
+    const requiredId = req.params.taskId
+    const data = await fs.readFile(path.join(__dirname, '/db/database.txt'), 'utf-8');
+    const tasks = await JSON.parse(data);
+    const requiredIndex = tasks.findIndex((task) => task._id.toString() === requiredId.toString())
+    tasks.splice(requiredIndex, 1)
+    console.log(requiredId, requiredIndex)
+    console.log(tasks)
+    await fs.writeFile(path.join(__dirname, '/db/database.txt'), JSON.stringify(tasks))
+    return res.status(200).json({ message: 'Task deleted successfully' })
+  }catch(err) {
+    console.log("cannot delete task")
+    res.status(500).send('Internal Server Error');
+  } 
 })
 
 

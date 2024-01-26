@@ -18,9 +18,11 @@ let TaskForm = () => {
             _id: uuidv4(),
             title: titleRef.current.value,
             date: dateRef.current.value,
-            description: descriptionRef.current.value
+            description: descriptionRef.current.value,
+            complete: "0"
         }
         dispatch(taskAction.setLoading(true))
+        try{
             const res = await fetch('http://localhost:8080/addTask', {
                 method: 'POST',
                 headers: {
@@ -29,29 +31,31 @@ let TaskForm = () => {
                 body: JSON.stringify(newTask),
             });
             
-            // Only dispatch the action if the server response is successful
             if (res.ok) {
-                console.log('---------------------------------------------------------------------------------------------')
                 dispatch(taskAction.add(newTask));
             }
+        }catch(err){
+            console.log(err) 
+        }finally{
             dispatch(taskAction.setLoading(false))
+        }
     }
 
     return (
         <>
             <div className="d-flex justify-content-center mt-4 font-monospace">
-                <Box className={styles['form-container']} sx={{ width: { md: "650px", xs: "90%" }, border: "1px solid #ffc107" }}>
+                <Box className={styles['form-container']} sx={{ width: { md: "650px", xs : "75vw" }, border: "1px solid #ffc107" }}>
                     <form className="d-flex flex-column">
                         <input ref={titleRef} type="text" placeholder="Title" className={`${styles['input']} form-control m-1`}></input>
                         <input ref={dateRef} type="date" placeholder="Date" className={`${styles['input']} form-control m-1`}></input>
                         <textarea className={`${styles['input']} form-control m-1`} id="text" ref={descriptionRef} name="description" placeholder="Take a note..." rows={3}></textarea>
-                        <div className={`align-self-end me-1`}>
+                        <div className={`align-self-center`}>
                             <div className='d-flex align-items-center'>
-                                <h3 className='mt-2'>Add Task</h3>
                                 <AddBoxIcon
                                     sx={{
-                                        height: "50px", width: "50px", transition: 'transform 200ms',
+                                        height: "60px", width: "60px", transitionProperty: "cursor transform", transition: '200ms ease-in-out',
                                         '&:hover': {
+                                            cursor : "pointer",
                                             transform: 'scale(1.09)',
                                         },
                                     }}

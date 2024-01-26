@@ -11,12 +11,13 @@ function TaskContainer() {
 
     // Implement a simple handleDragEnd function
     const handleDragEnd = result => {
-        if (!result.destination) return; // Drop outside the list
-        const sourceIndex = result.source.index;
-        const destinationIndex = result.destination.index;
+        if (!result.destination) return;
+        console.log(result)
 
-        // Dispatch action to update the task order in the Redux state
-        dispatch(taskAction.reorder({ sourceIndex, destinationIndex }));
+        dispatch(taskAction.reorder({
+            sourceIndex: result.source.index,
+            destinationIndex: result.destination.index
+        }))
     };
 
     return (
@@ -50,7 +51,7 @@ function TaskContainer() {
                             </div>
                         )}
                     </Droppable>
-                </DragDropContext> 
+                </DragDropContext>
             )}
         </>
     );
