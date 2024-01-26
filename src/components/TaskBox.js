@@ -3,10 +3,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { taskAction } from '../store/store';
+import Checkbox from '@mui/material/Checkbox';
 
 const customStyles = {
-  height: '180px',
-  width: '400px',
+  height: '88%',
+  width: '93%',
   overflowY: 'auto',
   padding: '5px',
   backgroundColor: '#f5fb1b2e',
@@ -14,7 +15,7 @@ const customStyles = {
   flexDirection: 'column',
 };
 
-function TaskBox({ title, date, description, _id }) {
+function TaskBox({ title, date, description, _id, complete }) {
   let dispatch = useDispatch()
   let removeTask = async (task_id) => {
     try {
@@ -33,20 +34,62 @@ function TaskBox({ title, date, description, _id }) {
     }
   }
 
+  let taskCheckHandler = async(event) => {
+    event.preventDefault()
+    const isCheck = event.target.checked 
+    console.log(isCheck)
+    try{
+      dispatch(taskAction.setLoading(true))
+      const response = await fetch('http://localhost:8080/checkTask', {
+        method : "POST",
+        headers : {
+          'Content-Type' : 'application/json'  
+        },
+        body : JSON.stringify({
+          taskId: _id,
+          isCheck: isCheck 
+        })
+      })
+      if(response.ok){
+        dispatch(taskAction.check({
+          taskId : _id,
+          isCheck:isCheck
+        }))
+      }
+    }catch(err){
+      console.log(err)
+      throw err 
+    }finally{
+      dispatch(taskAction.setLoading(false))
+    }
+  }
+
   return (
-    <Paper elevation={2} className='task-box' sx={{ ...customStyles, justifyContent: "space-between", borderLeft: '5px solid orange' }}>
+    <Paper elevation={2} className='task-box' sx={{
+      ...customStyles, mx: "5px",
+      justifyContent: "space-between",
+      borderLeft: `5px solid ${complete === "1" ? "green" : "orange"}`
+    }}>
       <div className='p-0'>
-        <h4 className='mt-0 mx-3'>{title === '' ? 'No title' : title}</h4>
+        <h4 className='mt-0 ms-3 d-flex justify-content-between align-items-center'>
+          {title === '' ? 'No title' : title}
+          <Checkbox color="success" 
+          sx={{ mt: "3px" }} 
+          onChange={taskCheckHandler} 
+          checked={complete === "1"}
+          />
+        </h4>
         <hr className='m-2' />
         <p className='mx-3 font-monospace'>{description === '' ? 'No description' : description}</p>
       </div>
-      <div className='d-flex justify-content-between'>
-        <p className='mx-3 mb-2 fw-medium'>created at : {date === '' ? 'Not mentioned' : date}</p>
+      <div className='d-flex justify-content-between align-items-center'>
+        <p className='mx-3 mb-1 fw-medium'>created at : {date === '' ? 'Not mentioned' : date}</p>
         <DeleteIcon fontSize='large'
           sx={{
+            justifySelf: 'flex-end',
             transitionProperty: "cursor, transform",
-            justifySelf : 'flex-end',
             transition: '200ms ease-in-out',
+            mb: "2px",
             '&:hover': {
               cursor: "pointer",
               transform: 'scale(1.09)',

@@ -31,13 +31,20 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Header />
-      <div className='d-flex justify-content-center align-items-center mt-5'>
-        <Button 
+      <div className='d-flex justify-content-center align-items-center mt-3'>
+        <Button
           color='error'
           variant="contained"
           onClick={() => setOpen(true)}
           endIcon={<EditNoteIcon />}
-          sx={{height:"50px", mx:2}}>
+          sx={{
+            height: "50px", mx: 2,
+            transition: '200ms ease-in-out',
+            '&:hover': {
+              cursor: "pointer",
+              transform: 'scale(1.04)',
+            },
+          }}>
           Add Task
         </Button>
         <Filter />
@@ -46,10 +53,10 @@ function App() {
         <Modal open={open} setOpen={setOpen}>
           <TaskForm />
         </Modal>}
-      {loading && <p className='text-center mt-5'>Loading...</p>}
-      {!loading &&
+      {/* {loading && <p className='text-center mt-5'>Loading...</p>}
+      {!loading && */}
         <TaskContainer />
-      }
+      {/* } */}
     </ThemeProvider>
   );
 }

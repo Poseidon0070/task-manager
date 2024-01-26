@@ -36,62 +36,21 @@ let taskSlice = createSlice({
         reorder : (state, action) => {
             const sourceIndex = action.payload.sourceIndex;
             const destinationIndex = action.payload.destinationIndex;
-            // console.log(state.tasks[sourceIndex]._id)
-            // console.log(state.tasks[destinationIndex]._id)
-            const sourceId = state.tasks[sourceIndex]._id
-            const destinationId = state.tasks[destinationIndex]._id
-            console.log(sourceIndex, destinationIndex)
-            // [myArray[index1], myArray[index2]] = [myArray[index2], myArray[index1]]
             let modifiedTasks = state.tasks
             let [removedTask] = modifiedTasks.splice(sourceIndex, 1)
-            modifiedTasks.splice(destinationId, 0, removedTask)
+            modifiedTasks.splice(destinationIndex, 0, removedTask)
             state.tasks = modifiedTasks 
+        },
+
+        check : (state, action) => {
+            const taskId = action.payload.taskId
+            const isCheck = action.payload.isCheck
+            const taskIndex = state.tasks.findIndex(task => task._id.toString() === taskId)
+            state.tasks[taskIndex].complete = isCheck ? "1" : "0"
         }
 
     }
 })
-
-// const addTask = (newTask) => {
-//     return async (dispatch) => {
-//         dispatch(taskSlice.actions.setLoading(true))
-//         dispatch(taskSlice.actions.add(newTask))
-//         await fetch('http://localhost:8080/addTask', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify(newTask),
-//         })
-//         dispatch(taskSlice.actions.setLoading(false))
-//     }
-// } 
-
-// const sendTask = (newTask) => {
-//     return async (dispatch) => {
-//         dispatch(taskSlice.actions.setLoading(true))
-//         const res = await fetch('http://localhost:8080/sendTask', {
-//             method: 'PUT',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify(newTask),
-//         })
-//         if(!res.ok){
-//             throw new Error("Failed to add task!");
-//         }
-//         dispatch(taskSlice.actions.setLoading(false))
-//     }
-// } 
-
-// const getTask = () => {
-//     return async (dispatch) => {
-//         dispatch(taskSlice.actions.setLoading(true))
-//         const data = await fetch('http://localhost:8080/getTask')
-//         const parsedData = await data.json()
-//         dispatch(taskSlice.actions.set(parsedData))
-//         dispatch(taskSlice.actions.setLoading(false))
-//     }
-// }
 
 const removeItem = (id) => {
     return async (dispatch) => {
@@ -103,7 +62,6 @@ const store = configureStore({
     reducer: taskSlice.reducer
 })
 
-// export { addTask, getTask, removeItem }
 
 export const taskAction = taskSlice.actions
 export default store

@@ -2,9 +2,9 @@ import  ReactDOM  from "react-dom";
 let MODAL_STYLE = {
     position: "fixed",
     left: "50%",
-    top: "50%",
+    top: "42%",
     transform: "translate(-50%,-50%)",
-    backgroundColor: "#FFF",
+    backgroundColor: "#f2f2df",
     padding: "25px",
     zIndex: "2",
     width: "auto",
@@ -19,7 +19,7 @@ let OVERLAY_STYLE = {
     bottom:0,
     right:0,
     backgroundColor: "rgba(0,0,0,0.7)",
-    zIndex: "1"
+    zIndex: "2"
 }
 let Modal = ({open,children,setOpen}) => {
     if(!open) return null;

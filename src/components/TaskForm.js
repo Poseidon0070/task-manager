@@ -13,7 +13,8 @@ let TaskForm = () => {
     let descriptionRef = useRef(null)
     let dispatch = useDispatch()
 
-    let submitHandler = async() => {
+    let submitHandler = async(event) => {
+        event.preventDefault()
         const newTask = {
             _id: uuidv4(),
             title: titleRef.current.value,

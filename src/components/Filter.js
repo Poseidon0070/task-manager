@@ -11,6 +11,7 @@ function Filter() {
     const dispatch = useDispatch()
 
     const handleChange = (event) => {
+        event.preventDefault()
         const filterType = event.target.value 
         if(filterType === filter) return ;
         try{
