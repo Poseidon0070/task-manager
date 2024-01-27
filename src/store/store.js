@@ -7,10 +7,12 @@ let taskSlice = createSlice({
         loading : false,
         filter : "All"
     },
+
     reducers: { 
 
         add: (state, action) => {
             const newTask = action.payload
+            console.log(newTask)
             state.tasks.push(newTask)
         },
 
@@ -31,7 +33,6 @@ let taskSlice = createSlice({
 
         setFilter : (state, action) => {
             state.filter = action.payload
-            // ... 
         },
 
         reorder : (state, action) => {
@@ -53,11 +54,6 @@ let taskSlice = createSlice({
     }
 })
 
-const removeItem = (id) => {
-    return async (dispatch) => {
-        console.log("hii")
-    }
-}
 
 const store = configureStore({
     reducer: taskSlice.reducer

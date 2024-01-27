@@ -19,7 +19,7 @@ function TaskBox({ title, date, description, _id, complete }) {
   let dispatch = useDispatch()
   let removeTask = async (task_id) => {
     try {
-      const res = await fetch(`http://192.168.0.105:8080/deleteTask/${task_id}`, {
+      const res = await fetch(`http://localhost:8080/deleteTask/${task_id}`, {
         method: 'DELETE',
       })
       if (res.ok) {
@@ -36,7 +36,7 @@ function TaskBox({ title, date, description, _id, complete }) {
     console.log(isCheck)
     try{
       dispatch(taskAction.setLoading(true))
-      const response = await fetch('http://192.168.0.105:8080/checkTask', {
+      const response = await fetch('http://localhost:8080/checkTask', {
         method : "POST",
         headers : {
           'Content-Type' : 'application/json'  

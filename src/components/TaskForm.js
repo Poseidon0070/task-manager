@@ -5,7 +5,6 @@ import { Box } from '@mui/material'
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { useDispatch } from 'react-redux'
 import { taskAction } from '../store/store';
-import { v4 as uuidv4 } from 'uuid';
 
 let TaskForm = () => {
     let titleRef = useRef(null)
@@ -16,15 +15,13 @@ let TaskForm = () => {
     let submitHandler = async(event) => {
         event.preventDefault()
         const newTask = {
-            _id: uuidv4(),
             title: titleRef.current.value,
             date: dateRef.current.value,
             description: descriptionRef.current.value,
             complete: "0"
         }
-        dispatch(taskAction.setLoading(true))
         try{
-            const res = await fetch('http://192.168.0.105:8080/addTask', {
+            const res = await fetch('http://localhost:8080/addTask', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -37,8 +34,6 @@ let TaskForm = () => {
             }
         }catch(err){
             console.log(err) 
-        }finally{
-            dispatch(taskAction.setLoading(false))
         }
     }
 

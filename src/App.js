@@ -13,17 +13,14 @@ import Filter from './components/Filter';
 function App() {
   const theme = createTheme()
   let dispatch = useDispatch()
-  const loading = useSelector(state => state.loading)
   let [open, setOpen] = useState(false);
 
   useEffect(() => {
     let fetchData = async () => {
-      dispatch(taskAction.setLoading(true))
-      const data = await fetch('http://192.168.0.105:8080/getTask')
+      const data = await fetch('http://localhost:8080/getTask')
       const parsedData = await data.json()
       console.log(parsedData)
       dispatch(taskAction.set(parsedData))
-      dispatch(taskAction.setLoading(false))
     }
     fetchData()
   }, [])
