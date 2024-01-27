@@ -31,6 +31,7 @@ let taskSlice = createSlice({
 
         setFilter : (state, action) => {
             state.filter = action.payload
+            // ... 
         },
 
         reorder : (state, action) => {

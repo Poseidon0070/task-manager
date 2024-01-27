@@ -14,14 +14,7 @@ function Filter() {
         event.preventDefault()
         const filterType = event.target.value 
         if(filterType === filter) return ;
-        try{
-            //....
-        }catch(err){
-            console.log(err)
-            throw err 
-        }finally{
-            dispatch(taskAction.setLoading(true))
-        }
+        dispatch(taskAction.setFilter(filterType))
     };
 
     return (
@@ -36,9 +29,6 @@ function Filter() {
                     onChange={handleChange}
                     sx={{color:"black"}}
                 >
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
                     <MenuItem value={"All"}>All</MenuItem>
                     <MenuItem value={"Complete"}>Complete</MenuItem>
                     <MenuItem value={"Incomplete"}>Incomplete</MenuItem>

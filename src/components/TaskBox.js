@@ -7,7 +7,7 @@ import Checkbox from '@mui/material/Checkbox';
 
 const customStyles = {
   height: '88%',
-  width: '93%',
+  width: {md : '93%', xs : '98%'},
   overflowY: 'auto',
   padding: '5px',
   backgroundColor: '#f5fb1b2e',
@@ -19,18 +19,14 @@ function TaskBox({ title, date, description, _id, complete }) {
   let dispatch = useDispatch()
   let removeTask = async (task_id) => {
     try {
-      dispatch(taskAction.setLoading(true))
-      const res = await fetch(`http://localhost:8080/deleteTask/${task_id}`, {
+      const res = await fetch(`http://192.168.0.105:8080/deleteTask/${task_id}`, {
         method: 'DELETE',
       })
-      dispatch(taskAction.setLoading(false))
       if (res.ok) {
         dispatch(taskAction.delete(task_id))
       }
     } catch (err) {
       console.log(err)
-    } finally {
-      dispatch(taskAction.setLoading(false))
     }
   }
 
@@ -40,7 +36,7 @@ function TaskBox({ title, date, description, _id, complete }) {
     console.log(isCheck)
     try{
       dispatch(taskAction.setLoading(true))
-      const response = await fetch('http://localhost:8080/checkTask', {
+      const response = await fetch('http://192.168.0.105:8080/checkTask', {
         method : "POST",
         headers : {
           'Content-Type' : 'application/json'  

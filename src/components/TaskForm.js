@@ -24,7 +24,7 @@ let TaskForm = () => {
         }
         dispatch(taskAction.setLoading(true))
         try{
-            const res = await fetch('http://localhost:8080/addTask', {
+            const res = await fetch('http://192.168.0.105:8080/addTask', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -19,7 +19,7 @@ function App() {
   useEffect(() => {
     let fetchData = async () => {
       dispatch(taskAction.setLoading(true))
-      const data = await fetch('http://localhost:8080/getTask')
+      const data = await fetch('http://192.168.0.105:8080/getTask')
       const parsedData = await data.json()
       console.log(parsedData)
       dispatch(taskAction.set(parsedData))
@@ -52,11 +52,9 @@ function App() {
       {open &&
         <Modal open={open} setOpen={setOpen}>
           <TaskForm />
-        </Modal>}
-      {/* {loading && <p className='text-center mt-5'>Loading...</p>}
-      {!loading && */}
-        <TaskContainer />
-      {/* } */}
+        </Modal>
+      }
+      <TaskContainer />
     </ThemeProvider>
   );
 }
